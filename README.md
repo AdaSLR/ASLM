@@ -3,7 +3,7 @@ Adaptive self-learning manipulator for performing various tasks using deep reinf
 
 
 
-#Materials for study
+# Materials for study
 
 * OpenAI gym with enviroments [here](https://github.com/openai/gym)
 * Basic RL  algorithms with [code](https://github.com/vmayoral/basic_reinforcement_learning)
