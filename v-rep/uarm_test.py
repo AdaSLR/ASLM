@@ -12,18 +12,39 @@
 import vrep
 import numpy as np
 
-
 class UARM(object):
 	def __init__(self, client_id):
+		self.client_id = client_id
+		self.motors_number = 4
 		self.motor_handlers = []
-		for i in range(0,4):
-			error, vrep_motor_handler = vrep.simxGetObjectHandle(client_id, 'uarm_motor' + str(i+1), vrep.simx_opmode_oneshot_wait)
+		for i in range(0, self.motors_number):
+			error, vrep_motor_handler = vrep.simxGetObjectHandle(self.client_id, 'uarm_motor' + str(i+1), vrep.simx_opmode_oneshot_wait)
 			if error == vrep.simx_return_ok:
 				self.motor_handlers.append(vrep_motor_handler)
 			else:
 				print('Error getting motor handlers, ERR: ' + str(error))
 				return
 
+	
+	def set_motors(self, position, degrees=False):
+		"""
+		Set values of the UARM's motors.
+		
+		Arguments: 	positions - list containing angular positions for all motors: 
+					positions = [joint_val_1, ..., joint_val_4] 
+					degrees - if given positions are in degress (True) or radians (False)
+		"""
+		# Recalculate into radians if positions are in degrees
+		if degrees:
+			coeff = np.pi/180
+			position = [pos * coeff for pos in position]
+		vrep.simxPauseCommunication(self.client_id, True)
+		errors = []
+		for i in range(0, self.motors_number):
+			code = vrep.simxSetJointTargetPosition(self.client_id, self.motor_handlers[i], position[i], vrep.simx_opmode_oneshot)
+			errors.append(code)
+		vrep.simxPauseCommunication(self.client_id, False)
+		
 
 def main():
 	vrep.simxFinish(-1) 
@@ -34,18 +55,18 @@ def main():
 		return -1	
 	print ('Connected to remote API server')
 
-	# Now try to retrieve data in a blocking fashion (i.e. a service call):
-	res, objs = vrep.simxGetObjects(clientID, vrep.sim_handle_all, vrep.simx_opmode_blocking)
-
-	# Now retrieve streaming data (i.e. in a non-blocking fashion):
-	vrep.simxGetIntegerParameter(clientID, vrep.get_joint_state, vrep.simx_opmode_streaming) # Initialize streaming
-
-	# Now send some data to V-REP in a non-blocking fashion:
-	vrep.simxAddStatusbarMessage(clientID,'Python training script have been connected.',vrep.simx_opmode_oneshot)
-
-	# Before closing the connection to V-REP, make sure that the last command sent out had time to arrive. You can guarantee this with (for example):
+	#vrep.simxAddStatusbarMessage(clientID,'Python training script have been connected.',vrep.simx_opmode_oneshot)
+	uarm = UARM(clientID)
+	print(uarm.motor_handlers)
+	uarm.set_motors(position=[0,34,15,0], degrees=True)
+	# Before closing the connection to V-REP, make sure that the last command 
+	# sent out had time to arrive
 	vrep.simxGetPingTime(clientID)
 
-	# Now close the connection to V-REP:
+	# Close the connection to V-REP:
 	vrep.simxFinish(clientID)
 	return 1
+
+
+if __name__=='__main__':
+	main()
