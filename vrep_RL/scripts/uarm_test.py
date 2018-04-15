@@ -16,13 +16,13 @@ import numpy as np
 
 def main():
 	env = VREPEnv()
-	uarm = UARM(env.conn_handler)
 	
 	while True:
 		pos = input('Enter 4 positions: ').split(' ')
 		pos = [int(p) for p in pos]	
 
-		uarm.set_motors(position=pos, degrees=True)
+		env.robot['uarm'].set_motors(position=pos, degrees=True)
+		print(env.state())
 		# Make sure that the last command 
 		# sent out had time to arrive
 		vrep.simxGetPingTime(env.conn_handler)
