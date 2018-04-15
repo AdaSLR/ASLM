@@ -15,6 +15,7 @@ class VREPEnv(object):
 		self._high_degrees_bound = 180
 		self._high_radians_bound = np.pi
 		# Get client id from the V-REP server-side
+		vrep.simxFinish(-1)
 		self.conn_handler = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
 		if self.conn_handler == -1:
 			print('Failed connecting to the remote API server')
@@ -33,3 +34,6 @@ class VREPEnv(object):
 			else:
 				print('Error getting camera handlers, ERR:', err)
 				return
+
+	def finish(self):
+		vrep.simxFinish(self.conn_handler)
