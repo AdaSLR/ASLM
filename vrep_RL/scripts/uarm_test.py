@@ -11,26 +11,25 @@
 
 from lib import vrep
 from uarm import UARM
+from environment import VREPEnv
 import numpy as np
 
 def main():
-	vrep.simxFinish(-1) 
-	# Connect to V-REP via sockets
-	clientID = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
-	if clientID == -1:
-		print ('Failed connecting to remote API server')
-		return -1	
-	print ('Connected to remote API server')
+	env = VREPEnv()
+	uarm = UARM(env.conn_handler)
+	
+	while True:
+		pos = input('Enter 4 positions: ').split(' ')
+		pos = [int(p) for p in pos]	
 
-	uarm = UARM(clientID)
-	print(uarm.motor_handlers)
-	uarm.set_motors(position=[0,34,15,0], degrees=True)
-	# Before closing the connection to V-REP, make sure that the last command 
-	# sent out had time to arrive
-	vrep.simxGetPingTime(clientID)
+		uarm.set_motors(position=pos, degrees=True)
+		# Make sure that the last command 
+		# sent out had time to arrive
+		vrep.simxGetPingTime(env.conn_handler)
 
 	# Close the connection to V-REP:
-	vrep.simxFinish(clientID)
+	env.finish()
+	
 	return 1
 
 
