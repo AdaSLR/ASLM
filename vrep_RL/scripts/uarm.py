@@ -18,13 +18,13 @@ class UARM(object):
 	
 
 	def grip(self):
-		err, vrep.simxSetIntegerSignal(self.client_id, self.gripper_handler, 1, vrep.simx_opmode_oneshot)
+		err = vrep.simxSetIntegerSignal(self.client_id, self.gripper_handler, 1, vrep.simx_opmode_oneshot)
 		if err != vrep.simx_return_ok:
 			print('Error while gripping, ERR: ', err)
 
 
 	def ungrip(self):
-		vrep.simxSetIntegerSignal(self.client_id, self.gripper_handler, 0, vrep.simx_opmode_oneshot)
+		err = vrep.simxSetIntegerSignal(self.client_id, self.gripper_handler, 0, vrep.simx_opmode_oneshot)
 		if err != vrep.simx_return_ok:
 			print('Error while gripping, ERR: ', err)
 
