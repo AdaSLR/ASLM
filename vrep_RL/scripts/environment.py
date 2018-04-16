@@ -1,14 +1,13 @@
 from lib import vrep
-from uarm import UARM
+from uarm import UARM	
 import numpy as np
 import cv2
 import time
 
 
 class VREPEnv(object):
-	"""
-	Class that implements all the methods for correct 
-	reinforcement learning algorithms research using V-REP.
+	"""Class that implements all the methods for correct 
+		reinforcement learning algorithms research using V-REP.
 	"""
 
 	def __init__(self):
@@ -46,12 +45,18 @@ class VREPEnv(object):
 
 
 	def state(self, degrees=True):
+		"""Returns current state of the environment.
+
+		Argument:
+			degrees(keyword) -- flag that indicates if state's elements will be in degrees or radians
+		"""
+
 		_state = []
 		# Get motors' positions
 		for motor in self.robot['uarm'].motor_handlers:
 			err, joint_position = vrep.simxGetJointPosition(self.conn_handler, motor, vrep.simx_opmode_streaming)
 			if err == vrep.simx_return_ok or err == vrep.simx_return_novalue_flag:
-				joint_position *= 180.0/np.pi 
+				joint_position *= 180.0/np.pi if degrees else 1 
 				_state.append(round(joint_position, 4))
 			else:
 				print('Error getting joint positions, ERR:', err)
@@ -70,6 +75,17 @@ class VREPEnv(object):
 
 
 	def step(self, entity, action):
+		"""Makes one step in simulation for the given entity.
+		
+		Arguments:
+			entity -- string argument, contains name of the robot we are making step for
+			action -- list containing four desired joint positions and grip flag at the end
+		
+		Returns:
+			state -- environment's state after executing the given action
+			reward -- real number
+		"""
+
 		# Set action to the given entity
 		pos = action[:-1]
 		grip = action[-1]
@@ -77,8 +93,12 @@ class VREPEnv(object):
 		self.robot[entity].grip() if grip else self.robot[entity].ungrip()
 		
 		# Return reward
+		# TODO: implement reward returning based on difference between
+		# two frames using ChangesDetector class
 		
 
 	def finish(self):
+		""" Closing connection between client and server-side V-REP 
+		"""
 		vrep.simxFinish(self.conn_handler)
 
