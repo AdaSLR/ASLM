@@ -13,9 +13,11 @@ class ChangesDetector(object):
         time.sleep(time)
         return cv2.imread(path)
 
-    def get_frame(self):
-        # Preprocess frames
-        _, frame = self.cap.read()
+
+    def get_similatiry(self, arr_1, arr_2):
+        return np.corrcoef(np.asarray(arr_1) + 0.01, np.asarray(arr_2) + 0.01)
+
+    def preprocess_frame(self, frame):
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame = self.fgbg.apply(frame)
@@ -25,18 +27,31 @@ class ChangesDetector(object):
     def get_reward(self, corr, treshold=0.675):
         return 1 if corr < treshold else 0
 
-    def identify_changes(self, n_of_frame=30, return_reward=False, show=False):
+    def identify_changes_images(self, frame, prev_frame):
+        frame = self.read_image(path, time)
+        frame = preprocess_frame(frame)
+        prev_frame = self.read_image(path, time=0)
+        prev_frame = self.preprocess_frame(prev_frame)
+        return get_similatiry(frame, prev_frame)
+
+    def get_video_frame(self):
+        _, frame = self.cap.read()
+        return frame
+
+    def identify_changes_video(self, n_of_frame=30, return_reward=False, show=False):
         # take the first frame
-        prev_frame = self.get_frame()
+        prev_frame = self.get_video_frame()
+        prev_frame = self.preprocess_frame(prev_frame)
         k = 0
         while True:
-            frame = self.get_frame()
+            frame = self.get_video_frame()
+            frame = self.preprocess_frame(frame)
 
             # Caoture and hold the prev frame
             if prev_frame is not None and k % n_of_frame == 0:
                 prev_frame = frame
                 k = 0
-                corr = np.corrcoef(np.asarray(frame) + 0.01, np.asarray(prev_frame) + 0.01)
+                corr = self.get_similatiry(frame, prev_frame)
             k += 1
 
             corr = np.mean(corr)
@@ -56,7 +71,7 @@ class ChangesDetector(object):
 
 if __name__ == '__main__':
     ch = ChangesDetector()
-    ch.identify_changes(return_reward=True, show=True)
+    ch.identify_changes_video(return_reward=True, show=True)
 
 #cv2.destroyWindow()
 #cv.release()
