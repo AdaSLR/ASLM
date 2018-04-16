@@ -18,10 +18,11 @@ def main():
 	env = VREPEnv()
 	
 	while True:
-		pos = input('Enter 4 positions: ').split(' ')
+		pos = input('Enter 4 positions and grip flag: ').split(' ')
 		pos = [int(p) for p in pos]	
 
-		env.robot['uarm'].set_motors(position=pos, degrees=True)
+		env.robot['uarm'].set_motors(position=pos[:-1], degrees=True)
+		env.robot['uarm'].grip() if pos[-1] else env.robot['uarm'].ungrip()
 		print(env.state())
 		# Make sure that the last command 
 		# sent out had time to arrive
