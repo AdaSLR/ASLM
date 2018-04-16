@@ -98,6 +98,20 @@ class VREPEnv(object):
 		# two frames using ChangesDetector class
 		
 
+	def _get_image_from_visual_sensor(self):
+		_, res, _ = vrep.simxGetVisionSensorImage(env.conn_hanra_handlers[0], 0, vrep.simx_opmode_streaming)
+		err, res, img =  vrep.simxGetVisionSensorImage(env.cov.camera_handlers[0], 0, vrep.simx_opmode_buffer)
+		if err == vrep.simx_return_ok:
+			print('Received image')
+			img = np.array(image, dtype=np.uint8)
+			img.resize([res[1], res[0], 3])
+		elif err == vrep.simx_return_novalue_flag:
+			print('No image received')
+			pass
+		else:
+			print('Error while receiving image: ', err)
+
+
 	def finish(self):
 		""" Closing connection between client and server-side V-REP 
 		"""
