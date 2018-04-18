@@ -88,7 +88,7 @@ class VREPEnv(object):
 
 		# Set action to the given entity
 		pos = np.clip(action[:-1], self._low_degrees_bound, self._high_degrees_bound) if degrees \
-			else np.clip(action[:-1]. self._low_radians_bound, self._high_radians_bound)
+			else np.clip(action[:-1], self._low_radians_bound, self._high_radians_bound)
 		grip = np.clip(action[-1], 0, 1)
 		self.robot[entity].set_motors(position=pos, degrees=True)
 		self.robot[entity].grip() if grip else self.robot[entity].ungrip()
