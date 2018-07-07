@@ -1,0 +1,196 @@
+<mujoco model="Details in the box">
+    <compiler angle="degree"/>
+
+    <option timestep="0.003" iterations="50" solver="Newton" jacobian="sparse" cone="elliptic" tolerance="1e-10"/>
+
+    <size njmax="5000" nconmax="2000" nstack="5000000"/>
+
+    <default>
+        <geom solimp=".9 .9 .01"/>        
+
+        <default class="object1">
+            <geom type="capsule" material="geom" rgba=".4 .9 .6 1" size="0.04 0.04"/>
+        </default>
+
+		<default class="borderpost">
+            <geom type="box" rgba=".55 .55 .55 1"/>
+        </default>
+	</default>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" width="128" height="128" rgb1=".4 .6 .8" rgb2="0 0 0"/>  
+        <texture name="texgeom" type="cube" builtin="flat" mark="cross" width="128" height="128" 
+            rgb1="0.6 0.6 0.6" rgb2="0.6 0.6 0.6" markrgb="1 1 1"/>  
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".4 .4 .4" rgb2=".6 .6 .6" 
+            width="512" height="512"/>  
+        <material name='geom' texture="texgeom" texuniform="true"/>
+        <material name='MatPlane' reflectance='0.3' texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+
+    <visual>
+        <quality shadowsize="4096" offsamples="8"/>
+        <map znear="0.1" force="0.05"/>
+    </visual>
+
+    <statistic extent="4"/>
+
+    <worldbody>
+        <light directional="true" diffuse=".8 .8 .8" pos="0 0 10" dir="0 0 -10"/>
+        <geom pos="0 0 0" type="plane" size="3 3 .5" rgba=".7 .7 .7 1" material="MatPlane"/>
+		
+		<!-- Borders -->
+		<body pos=".4 .0 .15">
+            <geom class="borderpost" size=".05 .45 .15"/>
+        </body>
+		<body pos="0 -.4 .15">
+            <geom class="borderpost" size=".4 .05 .15"/>
+        </body>
+		<body pos="-.4 0 .15">
+            <geom class="borderpost" size=".05 .45 .15"/>
+        </body>
+		<body pos="0 .4 .15">
+            <geom class="borderpost" size=".4 .05 .15"/>
+        </body>
+
+
+		<!-- Details -->
+        <body pos="-0.2 0.2 .3" quat="-0.632456 -0.632456 0.316228 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 0.2 .3" quat="-0.5547 -0.5547 0.5547 0.27735">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0.2 .3" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 0 .3" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+
+        <body pos="0 0 .3" quat="-0.755929 -0.377964 0.377964 0.377964">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0 .3" quat="-0.632456 -0.316228 0.632456 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 -0.2 .3" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 -0.2 .3" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+
+        <body pos="0.2 -0.2 .3" quat="-0.816497 0 0.408248 0.408248">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+ 
+
+        <body pos="-0.2 0.2 .5" quat="-0.632456 -0.632456 0.316228 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 0.2 .5" quat="-0.5547 -0.5547 0.5547 0.27735">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0.2 .5" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 0 .5" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 0 .5" quat="-0.755929 -0.377964 0.377964 0.377964">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0 .5" quat="-0.632456 -0.316228 0.632456 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 -0.2 .5" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 -0.2 .5" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+
+        <body pos="0.2 -0.2 .5" quat="-0.816497 0 0.408248 0.408248">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+ 		
+
+		<body pos="0 0 .8" quat="-0.755929 -0.377964 0.377964 0.377964">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0 .8" quat="-0.632456 -0.316228 0.632456 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 -0.2 .8" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 -0.2 .8" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 -0.2 .8" quat="-0.816497 0 0.408248 0.408248">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>       
+
+
+        <body pos="-0.2 0.2 .85" quat="-0.632456 -0.632456 0.316228 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 0.2 .85" quat="-0.5547 -0.5547 0.5547 0.27735">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0.2 .85" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 0 .85" quat="-0.471405 -0.471405 0.707107 0.235702">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 0 .85" quat="-0.755929 -0.377964 0.377964 0.377964">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 0 .85" quat="-0.632456 -0.316228 0.632456 0.316228">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="-0.2 -0.2 .85" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0 -0.2 .85" quat="-0.516398 -0.258199 0.774597 0.258199">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+        <body pos="0.2 -0.2 .85" quat="-0.816497 0 0.408248 0.408248">
+            <freejoint/>
+            <geom class="object1"/>
+        </body>
+ 
+    </worldbody>
+</mujoco>
